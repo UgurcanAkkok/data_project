@@ -14,7 +14,7 @@ struct entry {
     entry * link;
 };
 
-template<typename itemT>
+template<class itemT>
 class hashTable {
     // Hash Table implementation
 
@@ -56,7 +56,7 @@ class hashTable {
         entry<itemT> * dataArray;
         int capacity;
         int length;
-        const uint32_t seed;
+        uint32_t seed;
         int * indexStatus;
 
         int hashFunc(string key); // Uses Murmur3 Hash Function

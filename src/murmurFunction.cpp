@@ -1,5 +1,16 @@
 #include "murmurFunction.hpp"
 
+#if defined (_MSC_VER)
+
+#define ALWAYS_INLINE __forceinline
+
+#include <stdlib.h>
+
+#define ROTATE(x,y) _rotl64(x,y)
+#define LARGE_CONST(x) (x)
+
+#else
+
 #define ALWAYS_INLINE inline __attribute__((always_inline))
 
 inline uint64_t rotate(uint64_t n, int8_t d){
@@ -8,6 +19,8 @@ inline uint64_t rotate(uint64_t n, int8_t d){
 
 #define ROTATE(x,y) rotate(x,y)
 #define LARGE_CONST(x) (x##LLU)
+
+#endif
 
 ALWAYS_INLINE uint64_t getpart(const uint64_t * whole, int index){
     return whole[index];
