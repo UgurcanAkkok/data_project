@@ -1,17 +1,15 @@
-#include "murmurFunction.hpp"
 #include "hashTable.hpp"
+#include "murmurFunction.hpp"
 
-#include <random>
 #include <ctime>
 #include <string>
+#include <random>
 #include <iostream>
-
-using namespace std;
 
 template <class itemT>
 hashTable<itemT>::hashTable(int size){
     srand(time(NULL));
-    seed = (const uint32_t)rand();
+    seed = rand();
     dataArray = new entry<itemT>[size];
     capacity = size;
     length = 0;
