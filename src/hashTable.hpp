@@ -1,20 +1,20 @@
 #pragma once
+
 #include <string>
+using namespace std;
 
 #define HASH_TABLE_SIZE 5000
 
 enum e_indexStatus {EMPTY, FULL, DELETED};
 
-using namespace std;
 template <class itemT>
 struct entry {
-            string key;
-            itemT value;
-            entry * link;
+    string key;
+    itemT value;
+    entry * link;
 };
 
-// TODO: Iterator for this class
-template<class itemT>
+template<typename itemT>
 class hashTable {
     // Hash Table implementation
 

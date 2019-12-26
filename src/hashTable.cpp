@@ -1,10 +1,11 @@
-#include "table.h"
-#include "murmur3.h"
-#include <cstddef>
+#include "murmurFunction.hpp"
+#include "hashTable.hpp"
+
 #include <random>
 #include <ctime>
 #include <string>
 #include <iostream>
+
 using namespace std;
 
 template <class itemT>
@@ -59,9 +60,14 @@ template <class itemT>
 int hashTable<itemT>::hashFunc(string key){
     const char * keyCharArray = key.c_str();
     int keyLength = key.length();
-    uint64_t hash;
-    murmur(keyCharArray, keyLength, seed, hash);
-    return (int)(hash % capacity);
+    uint64_t * hashes = new uint64_t[2];
+    int hash = 0;
+    murmur(keyCharArray, keyLength, seed, hashes);
+    hash += hashes[0] % capacity;
+    hash += hashes[1] % capacity;
+    hash = hash % capacity;
+    return hash;
+
 }
 
 template <class itemT>
@@ -128,7 +134,7 @@ void hashTable<itemT>::remove(string key){
         return; // Item is not present in table
     }
     else if (indexStatus[hash] == FULL && (dataArray[hash]).key == key){
-        indexStatus[hash] = DELETED;
+        indexStatus[hash] = EMPTY;
     }
     else {
         entry<itemT> *current = &dataArray[hash];
@@ -228,3 +234,4 @@ typename hashTable<itemT>::iterator hashTable<itemT>::iterator::end(){
     }
     currentEntry = temp;
 }
+

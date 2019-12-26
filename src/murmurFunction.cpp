@@ -1,16 +1,7 @@
-#include "murmur3.h"
-#if defined (_MSC_VER)
+#include "murmurFunction.hpp"
 
-#define INLINE __forceinline
-#include <stdlib.h>
-#define ROTATE(x,y) _rotl64(x,y)
-#define LARGE_CONST(x) (x)
+#define ALWAYS_INLINE inline __attribute__((always_inline))
 
-#else
-
-#define INLINE inline __attribute__((always_inline))
-
-// n is the number to rotate left and d is amount of rotation
 inline uint64_t rotate(uint64_t n, int8_t d){
     return (n << d) | (n >> (64 - d));
 }
@@ -18,16 +9,14 @@ inline uint64_t rotate(uint64_t n, int8_t d){
 #define ROTATE(x,y) rotate(x,y)
 #define LARGE_CONST(x) (x##LLU)
 
-#endif
-
-INLINE uint64_t getpart(const uint64_t * whole, int index){
+ALWAYS_INLINE uint64_t getpart(const uint64_t * whole, int index){
     return whole[index];
 }
 
 // Mix the bits
 
 // Forcing avalanche effect
-INLINE uint64_t mix(uint64_t a){
+ALWAYS_INLINE uint64_t mix(uint64_t a){
     a ^= a >> 33;
     a *= LARGE_CONST(0xff51afd7ed558ccd);
     a ^= a >> 33;
@@ -37,7 +26,7 @@ INLINE uint64_t mix(uint64_t a){
     return a;
 }
 
-void murmur(const void *key, int len, uint32_t seed, void *output){
+void murmur(const void *key, int len, uint32_t seed, uint64_t output[2]){
 
     const uint8_t * bytes = (const uint8_t *) key;
     const int blocksLen = len / 16;
@@ -114,7 +103,7 @@ void murmur(const void *key, int len, uint32_t seed, void *output){
     hash1 += hash2;
     hash2 += hash1;
 
-    ((uint64_t*)output)[0] = hash1;
-    ((uint64_t*)output)[1] = hash2;
+    output[0] = hash1;
+    output[1] = hash2;
 
 }
