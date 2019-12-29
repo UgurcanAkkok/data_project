@@ -39,24 +39,8 @@ class hashTable {
         void print() const;
         // Return the item using key
         itemT& operator[](string key) const;
+        void toArray(itemT output[]);
 
-        class iterator {
-            public:
-                iterator();
-                ~iterator();
-                iterator& operator++(); // Prefix increment
-                bool operator==(iterator& i);
-                bool operator!=(iterator& i);
-                itemT& operator*();
-
-                iterator begin();
-                iterator end();
-            private:
-                int curPos[2];
-                int endPos[2];
-                entry<itemT> * currentEntry;
-
-        };
 
     private:
         entry<itemT> * dataArray;
@@ -94,30 +78,6 @@ hashTable<itemT>::~hashTable<itemT>(){
     delete [] dataArray;
     delete [] indexStatus;
 }
-
-/*template <class itemT>
-hashTable<itemT>::hashTable(const hashTable<itemT>& table){
-    capacity = table.capacity;
-    length = table.length;
-    seed = table.seed;
-    indexStatus = new int[capacity];
-    dataArray = new entry<itemT>[capacity];
-    entry<itemT> * current;
-    entry<itemT> * currentTable;
-    for (int i = 0; i < capacity && table.indexStatus[i] == FULL; i++){
-        dataArray[i] = table.dataArray[i];
-        current = &dataArray[i];
-        currentTable = &table.dataArray[i];
-        while(currentTable->link != NULL){
-            current->link = new entry<itemT>;
-            current = current->link;
-            currentTable = currentTable->link;
-            current->key = currentTable->key;
-            current->value = currentTable->value;
-        }
-        indexStatus[i] = table.indexStatus[i];
-    }
-}*/
 
 template <class itemT>
 int hashTable<itemT>::hashFunc(string key) const{
@@ -168,8 +128,6 @@ itemT& hashTable<itemT>::retrive(string key) const {
             current = current->link;
         }
         else {
-            cout << "The item with the key {" << key 
-                << "} is not found" << endl;
             throw std::invalid_argument("Key not found");
         }
     }
@@ -220,92 +178,15 @@ itemT& hashTable<itemT>::operator[](string key) const {
     return retrive(key);
 }
 
-
-template <class itemT>
-hashTable<itemT>::iterator::iterator(){
-    curPos = {0,0};
-    int endLastIndex = 0;
-    entry<itemT> * temp = this->dataArray[this->capacity];
-    while (temp->link != nullptr){
-        endLastIndex++;
-        temp = temp->link;
-    }
-    endPos = {this->capacity,endLastIndex};
-    while (this->indexStatus[curPos[0]] != FULL){
-        curPos[0]++;
-    }
-    currentEntry = this->dataArray[curPos[0]];
-}
-
-template <class itemT>
-hashTable<itemT>::iterator::~iterator(){ }
-
-template <class itemT>
-typename hashTable<itemT>::iterator& hashTable<itemT>::iterator::operator++(){
-    entry<itemT> * temp = currentEntry;
-    if (temp->link != NULL){
-        currentEntry = temp->link;
-        curPos[1]++;
-        return *this;
-    }
-    else {
-        while (this->indexStatus[++curPos[0]] != FULL){
-            continue;
-        }
-        curPos[2] = 0;
-        currentEntry = this->dataArray[curPos[0]];
-        return *this;
-    }
-}
-
-template <class itemT>
-bool hashTable<itemT>::iterator::operator==(hashTable<itemT>::iterator &i){
-    return (currentEntry->key == i.currentEntry->key);
-}
-
-template <class itemT>
-bool hashTable<itemT>::iterator::operator!=(hashTable<itemT>::iterator &i){
-    return (currentEntry->key != i.currentEntry->key);
-}
-
-template <class itemT>
-itemT& hashTable<itemT>::iterator::operator*(){
-    return *currentEntry;
-}
-
-template <class itemT>
-typename hashTable<itemT>::iterator hashTable<itemT>::iterator::begin(){
-    curPos = {0,0};
-    while (this->indexStatus[curPos[0]] != FULL){
-        curPos[0]++;
-    }
-    currentEntry = this->dataArray[curPos[0]];
-}
-
-template <class itemT>
-typename hashTable<itemT>::iterator hashTable<itemT>::iterator::end(){
-    curPos[0] = endPos[0];
-    curPos[1] = 0;
-    while (this->dataArray[curPos[0]] != FULL){
-        curPos[0]--;
-    }
-    entry<itemT> * temp = this->dataArray[curPos[0]];
-    while (temp->link != NULL){
-        temp = temp->link;
-        curPos[1]++;
-    }
-    currentEntry = temp;
-}
-
 template <class itemT>
 void hashTable<itemT>::print() const {
     for (int i = 0; i < capacity; i++){
         if (indexStatus[i] == FULL){
             entry<itemT> *m = &dataArray[i];
-            cout << m->key << ":"<< m->value << " ";
+            cout << m->value;
             while(m->link != NULL){
                 m = m->link;
-                cout << m->key << "*:"<< m->value << " ";
+                cout << m->value;
             }
         }
         else {
@@ -315,3 +196,17 @@ void hashTable<itemT>::print() const {
     cout << endl;
 }
 
+template <class itemT>
+void hashTable<itemT>::toArray(itemT *output){
+    int j = 0;
+    for (int i = 0; i < capacity; i++){
+        if (indexStatus[i] == FULL){
+            entry<itemT> *m = &dataArray[i];
+            output[j++] = m->value;
+            while (m->link != NULL){
+                m = m->link;
+                output[j++] = m->value;
+            }
+        }
+    }
+}
