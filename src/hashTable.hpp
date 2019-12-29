@@ -95,17 +95,19 @@ hashTable<itemT>::~hashTable<itemT>(){
     delete [] indexStatus;
 }
 
-template <class itemT>
+/*template <class itemT>
 hashTable<itemT>::hashTable(const hashTable<itemT>& table){
     capacity = table.capacity;
     length = table.length;
     seed = table.seed;
     indexStatus = new int[capacity];
     dataArray = new entry<itemT>[capacity];
+    entry<itemT> * current;
+    entry<itemT> * currentTable;
     for (int i = 0; i < capacity && table.indexStatus[i] == FULL; i++){
-        this->dataArray[i] = table.dataArray[i];
-        entry<itemT> * current = this->dataArray[i];
-        entry<itemT> * currentTable = table.dataArray[i];
+        dataArray[i] = table.dataArray[i];
+        current = &dataArray[i];
+        currentTable = &table.dataArray[i];
         while(currentTable->link != NULL){
             current->link = new entry<itemT>;
             current = current->link;
@@ -113,9 +115,9 @@ hashTable<itemT>::hashTable(const hashTable<itemT>& table){
             current->key = currentTable->key;
             current->value = currentTable->value;
         }
-        this->indexStatus[i] = table.indexStatus[i];
+        indexStatus[i] = table.indexStatus[i];
     }
-}
+}*/
 
 template <class itemT>
 int hashTable<itemT>::hashFunc(string key) const{
@@ -295,7 +297,6 @@ typename hashTable<itemT>::iterator hashTable<itemT>::iterator::end(){
     currentEntry = temp;
 }
 
-
 template <class itemT>
 void hashTable<itemT>::print() const {
     for (int i = 0; i < capacity; i++){
@@ -304,7 +305,7 @@ void hashTable<itemT>::print() const {
             cout << m->key << ":"<< m->value << " ";
             while(m->link != NULL){
                 m = m->link;
-                cout << m->value << " ";
+                cout << m->key << "*:"<< m->value << " ";
             }
         }
         else {
