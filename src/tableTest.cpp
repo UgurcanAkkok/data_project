@@ -1,19 +1,13 @@
 #include "hashTable.hpp"
 
 int main(){
-    hashTable<int> t(5);
-    t.insert(7,"happy");
-    t.insert(412,"sad");
-    t.insert(511,"angry");
-    t.insert(421,"bus");
-    t.insert(41231,"nowhere");
-    t.insert(593,"wallpaper");
-    t.print();
+    hashTable<int> t(5000);
 
-    int angry = t["angry"];
-    int null = t["null"];
-    bool isNull = t.search("null");
-    int sad = t.retrive("sad");
-    bool isSad = t.search("sad");
+    srand(0);
+    for (int i = 0; i < 500000; i++){
+        int value = rand();
+        t.insert(value, to_string(value));
+    }
 
+    //t.print();
 }
