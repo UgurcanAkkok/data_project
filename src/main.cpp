@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cassert>
 
+#define ALLPRODUCTS_SIZE 5000
 using namespace std;
 
 class product {
@@ -75,7 +76,7 @@ int main(){
     string dummy;
     string quantityString;
     ifstream dataF("OnlineRetail.csv");
-    product allProducts[5000] {};
+    product allProducts[ALLPRODUCTS_SIZE] {};
 
     // Getting the header out of the way
     getline(dataF,dummy);
@@ -97,9 +98,10 @@ int main(){
 
     table.toArray(allProducts);
 
-    quickSort(allProducts,0,5000-1);
-    printArray(allProducts, 10);
-
+    quickSort(allProducts,0,ALLPRODUCTS_SIZE-1);
+    for (int i = ALLPRODUCTS_SIZE - 1; i >= ALLPRODUCTS_SIZE - 10; i--){
+        cout << allProducts[i];
+    }
     /*table.print();*/
 
     return 0;
