@@ -17,7 +17,57 @@ class product {
     }
 };
 
+// swapping elements
+void swap(product* a, product* b)
+{
+	product temp = *a;
+	*a = *b;
+	*b = temp;
+}
 
+//take the last element as pivot, put it in its place in sorted array
+//if element is smaller than pivot put it to left, if its larger than pivot put it to right
+int partition(product arr[], int first, int last)
+{
+	product pivot = arr[last]; // pivot 
+	int i = (first - 1); // index of the small one
+
+	for (int j = first; j <= last - 1; j++)
+	{
+		
+		if ( (arr[j]).quantity <= pivot.quantity)
+		{
+			i++;
+            swap(&arr[i], &arr[j]);
+		}
+	}
+	swap(&arr[i + 1], &arr[last]);
+	return (i + 1);
+}
+
+
+
+//printing func.
+void printArray(product arr[], int size)
+{
+	int i;
+	for (i = 0; i < size; i++)
+		cout << arr[i] << " ";
+	cout << endl;
+}
+
+
+//quicksorting func.
+void quickSort(product arr[], int first, int last)
+{
+	if (first < last)
+	{
+		int pi = partition(arr, first, last);
+
+		quickSort(arr, first, pi - 1);
+		quickSort(arr, pi + 1, last);
+	}
+}
 
 int main(){
     product temp;
@@ -25,7 +75,7 @@ int main(){
     string dummy;
     string quantityString;
     ifstream dataF("OnlineRetail.csv");
-    product allProducts[50000];
+    product allProducts[5000] {};
 
     // Getting the header out of the way
     getline(dataF,dummy);
@@ -46,9 +96,10 @@ int main(){
     }
 
     table.toArray(allProducts);
-    cout << allProducts[0];
-    cout << allProducts[4];
-    cout << allProducts[19];
+
+    quickSort(allProducts,0,5000-1);
+    printArray(allProducts, 10);
+
     /*table.print();*/
 
     return 0;
