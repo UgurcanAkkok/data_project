@@ -12,15 +12,15 @@ void swap(int* a, int* b)
 
 //take the last element as pivot, put it in its place in sorted array
 //if element is smaller than pivot put it to left, if its larger than pivot put it to right
-int partition(int arr[], int first, int last)
+int partition(product arr[], int first, int last)
 {
-	int pivot = arr[last]; // pivot 
+	product pivot = arr[last]; // pivot 
 	int i = (first - 1); // index of the small one
 
 	for (int j = first; j <= last - 1; j++)
 	{
 		
-		if (arr[j] < pivot)
+		if ( (arr[j]).quantity = < pivot.quantity)
 		{
 			i++;
             swap(&arr[i], &arr[j]);
@@ -33,7 +33,7 @@ int partition(int arr[], int first, int last)
 
 
 //printing func.
-void printArray(int arr[], int size)
+void printArray(product arr[], int size)
 {
 	int i;
 	for (i = 0; i < size; i++)
