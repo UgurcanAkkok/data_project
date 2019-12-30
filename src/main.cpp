@@ -74,10 +74,7 @@ int main(){
         getline(dataF, temp.stockCode, ';'); //Stock Code
         getline(dataF, temp.desc, ';'); //Description
         getline(dataF, quantityString, ';'); //Quantity
-        getline(dataF, dummy, ';'); //Invoice Date
-        getline(dataF, dummy, ';'); //Unit Price
-        getline(dataF, dummy, ';'); //CustomerId
-        getline(dataF, dummy); //Country
+        getline(dataF, dummy); // the rest
         temp.quantity = std::stoi(quantityString);
         if (table.search(temp.stockCode))
             (table[temp.stockCode]).quantity += temp.quantity;
