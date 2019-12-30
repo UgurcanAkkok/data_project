@@ -23,7 +23,6 @@ struct entry {
 template<class itemT>
 class hashTable {
     // Hash Table implementation
-
     // Uses chaining for resolving conflicts
     // and Murmur3 function for the hash function
     // which is very efficent, fast and has good
@@ -41,14 +40,12 @@ class hashTable {
         itemT& operator[](string key) const;
         void toArray(itemT output[]);
 
-
     private:
         entry<itemT> * dataArray;
         int capacity;
         int length;
         uint32_t seed;
         int * indexStatus;
-
         int hashFunc(string key) const ; // Uses Murmur3 Hash Function
 };
 #endif
@@ -61,7 +58,6 @@ hashTable<itemT>::hashTable(int size){
     capacity = size;
     length = 0;
     indexStatus = new int[capacity]{EMPTY};
-
 }
 
 template <class itemT>
@@ -81,6 +77,7 @@ hashTable<itemT>::~hashTable<itemT>(){
 
 template <class itemT>
 int hashTable<itemT>::hashFunc(string key) const{
+    // Hash Function, uses Murmur3_x64_128
     const char * keyCharArray = key.c_str();
     int keyLength = key.length();
     uint64_t * hashes = new uint64_t[2];
@@ -90,7 +87,6 @@ int hashTable<itemT>::hashFunc(string key) const{
     hash += hashes[1] % capacity;
     hash = hash % capacity;
     return hash;
-
 }
 
 template <class itemT>
@@ -102,9 +98,8 @@ void hashTable<itemT>::insert(itemT item, string key){
         length++;
     }
     else if (dataArray[hash].key == key){
-        cout << "Key " << key << " has already been inserted.\n"
+        cout << "Key " << key << " has already been inserted."
             << "Not allowing duplicates." << endl;
-
     }
     else {
         entry<itemT> * temp = &dataArray[hash];
@@ -118,6 +113,7 @@ void hashTable<itemT>::insert(itemT item, string key){
 
 template <class itemT>
 itemT& hashTable<itemT>::retrive(string key) const {
+    // Returns the item for given key
     int hash = hashFunc(key);
     if (indexStatus[hash] != FULL){
         throw invalid_argument("Key not found");
@@ -138,6 +134,7 @@ itemT& hashTable<itemT>::retrive(string key) const {
 
 template <class itemT>
 bool hashTable<itemT>::search(string key) const {
+    // Returns true if entry with given key is present
     try {
         retrive(key);
     } 
@@ -157,9 +154,9 @@ void hashTable<itemT>::remove(string key){
         indexStatus[hash] = EMPTY;
     }
     else {
+        // Item is in one of the links
         entry<itemT> *current = &dataArray[hash];
         entry<itemT> *next;
-
         while (current->link != NULL){
             next = current->link;
             if (next->key == key){
@@ -175,11 +172,13 @@ void hashTable<itemT>::remove(string key){
 
 template <class itemT>
 itemT& hashTable<itemT>::operator[](string key) const {
+    //retrive with the syntax : table["key"] 
     return retrive(key);
 }
 
 template <class itemT>
 void hashTable<itemT>::print() const {
+    // Print all the items, accessing each of them
     for (int i = 0; i < capacity; i++){
         if (indexStatus[i] == FULL){
             entry<itemT> *m = &dataArray[i];
@@ -198,6 +197,7 @@ void hashTable<itemT>::print() const {
 
 template <class itemT>
 void hashTable<itemT>::toArray(itemT *output){
+    // Copy all the items to given array
     int j = 0;
     for (int i = 0; i < capacity; i++){
         if (indexStatus[i] == FULL){

@@ -27,7 +27,6 @@ ALWAYS_INLINE uint64_t getpart(const uint64_t * whole, int index){
 }
 
 // Mix the bits
-
 // Forcing avalanche effect
 ALWAYS_INLINE uint64_t mix(uint64_t a){
     a ^= a >> 33;

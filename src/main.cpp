@@ -3,10 +3,11 @@
 #include <iostream>
 #include <cassert>
 
-#define ALLPRODUCTS_SIZE 5000
+#define ALLPRODUCTS_SIZE 5000 // Number of distinct products
 using namespace std;
 
 class product {
+    // We will insert this class to the table
     public:
     string stockCode;
     string desc;
@@ -27,7 +28,8 @@ void swap(product* a, product* b)
 }
 
 //take the last element as pivot, put it in its place in sorted array
-//if element is smaller than pivot put it to left, if its larger than pivot put it to right
+//if element is smaller than pivot put it to left, if its larger than 
+//pivot put it to right
 int partition(product arr[], int first, int last)
 {
 	product pivot = arr[last]; // pivot 
@@ -46,37 +48,24 @@ int partition(product arr[], int first, int last)
 	return (i + 1);
 }
 
-
-
-//printing func.
-void printArray(product arr[], int size)
-{
-	int i;
-	for (i = 0; i < size; i++)
-		cout << arr[i] << " ";
-	cout << endl;
-}
-
-
 //quicksorting func.
 void quickSort(product arr[], int first, int last)
 {
 	if (first < last)
 	{
 		int pi = partition(arr, first, last);
-
 		quickSort(arr, first, pi - 1);
 		quickSort(arr, pi + 1, last);
 	}
 }
 
 int main(){
-    product temp;
+    product temp; // Read into this and insert a copy of this
     hashTable<product> table;
-    string dummy;
-    string quantityString;
+    string dummy; // Read unneccessary info to this var
+    string quantityString; //First read the quantity as string, then convert
     ifstream dataF("OnlineRetail.csv");
-    product allProducts[ALLPRODUCTS_SIZE] {};
+    product allProducts[ALLPRODUCTS_SIZE] {}; // Array to apply the sort
 
     // Getting the header out of the way
     getline(dataF,dummy);
@@ -102,7 +91,7 @@ int main(){
     for (int i = ALLPRODUCTS_SIZE - 1; i >= ALLPRODUCTS_SIZE - 10; i--){
         cout << allProducts[i];
     }
-    /*table.print();*/
-
+    
+    dataF.close();
     return 0;
 }
