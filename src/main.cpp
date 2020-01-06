@@ -60,6 +60,7 @@ void quickSort(product arr[], int first, int last)
 }
 
 int main(){
+    clock_t begin_time = clock();
     product temp; // Read into this and insert a copy of this
     hashTable<product> table;
     string dummy; // Read unneccessary info to this var
@@ -76,10 +77,17 @@ int main(){
         getline(dataF, quantityString, ';'); //Quantity
         getline(dataF, dummy); // the rest
         temp.quantity = std::stoi(quantityString);
-        if (table.search(temp.stockCode))
+        /*if (table.search(temp.stockCode))
             (table[temp.stockCode]).quantity += temp.quantity;
         else
+            table.insert(temp,temp.stockCode);*/
+        try {
+            (table[temp.stockCode]).quantity += temp.quantity;
+        }
+        catch (invalid_argument& e){
             table.insert(temp,temp.stockCode);
+        }
+
     }
 
     table.toArray(allProducts);
@@ -90,5 +98,6 @@ int main(){
     }
     
     dataF.close();
+    cout << (clock() - begin_time) / (float)CLOCKS_PER_SEC << " second";
     return 0;
 }
